@@ -145,8 +145,20 @@ $ cf update-service my-redis-service -p a-bigger-plan
 
 Here are the plans you can upgrade to, depending on the one you are currently using:
 
-* If you are currently using the `redis-single-small` plan, you can upgrade to `redis-single-big` plan.
-* If you are currently using the `redis-cluster-small` plan, you can upgrade to `redis-cluster-big` plan.
+| Base Plan | Target Plan |
+|------|-----------|
+| redis-single-nano | redis-single-small <br> redis-single-medium <br> redis-single-big <br> redis-cluster-small <br> redis-cluster-medium <br> redis-cluster-big |
+| redis-single-small | redis-single-medium <br> redis-single-big <br> redis-cluster-small <br> redis-cluster-medium <br> redis-cluster-big |
+| redis-single-medium | redis-single-big <br> redis-cluster-medium <br> redis-cluster-big |
+| redis-single-big | redis-cluster-big |
+| redis-cluster-small | redis-cluster-medium <br> redis-cluster-big |
+| redis-cluster-medium | redis-cluster-big |
+| redis-single-nano-ssl | redis-single-small-ssl <br> redis-single-medium-ssl <br> redis-single-big-ssl <br> redis-cluster-small-ssl <br> redis-cluster-medium-ssl <br> redis-cluster-big-ssl |
+| redis-single-small-ssl | redis-single-medium-ssl <br> redis-single-big-ssl <br> redis-cluster-small-ssl <br> redis-cluster-medium-ssl <br> redis-cluster-big-ssl |
+| redis-single-medium-ssl | redis-single-big-ssl <br> redis-cluster-medium-ssl <br> redis-cluster-big-ssl |
+| redis-single-big-ssl | redis-cluster-big-ssl |
+| redis-cluster-small-ssl | redis-cluster-medium-ssl <br> redis-cluster-big-ssl |
+| redis-cluster-medium-ssl | redis-cluster-big-ssl |
 
 
 ## <a id='change-rdb-persistence-settings'></a> Change RDB Persistence Settings
@@ -289,59 +301,7 @@ was successfully created.
 ## <a id='backup-and-restore-service-instances'></a> Back Up and Restore Service Instances
 
 a9s Redis provides an easy way to create backups and restore if needed.
-
-### <a id='get-dashboard-address-login-and-authorize'></a> Get Dashboard Address, Log In, and Authorize
-
-1. Get the dashboard URL with `cf service SERVICE-NAME`.
-  ```bash
-  $cf service my-redis
-
-  Service instance: my-redis
-  Service: a9s-redis
-  Bound apps:
-  Tags:
-  Plan: redis-single-small
-  Description: This is a service creating and managing dedicated Redis service instances and clusters, powered by the anynines Service Framework
-  Documentation url:
-  Dashboard: https://a9s-redis-dashboard.aws.ie.a9s.eu/service-instances/ca16f111-5073-40b7-973a-156c75dd3028
-
-  Last Operation
-  Status: update succeeded
-  Message:
-  Started: 2017-10-26T08:28:38Z
-  Updated: 2017-10-26T08:28:38Z
-  ```
-
-1. Browse to the dashboard URL and authenticate on the redirected page with your Cloud Foundry credentials:
-<%= image_tag("authentication-page.png") %>
-
-1. Click **Authorize** to approve the authorization request:
-<%= image_tag("authorization-page.png") %>
-
-### <a id='perform-a-backup'></a> Perform a Backup
-
-On the dashboard, you can trigger a backup by clicking **Trigger backup**.
-
-<%= image_tag("service-dashboard.png") %>
-
-After a short period of time, the backup will be queued and the backup process will soon start.
-
-<%= image_tag("service-dashboard-bkp-triggered.png") %>
-
-<p class='note'><strong>Note:</strong> Depending on the size of the data, the backup will take some time.</p>
-
-### <a id='restore-a-backup'></a> Restore a Backup
-
-1. Open the dashboard again and select the backup you would like to restore.
-
-1. Click **Restore** and wait for the restore to trigger.
-
-![service-dashboard](images/service-dashboard-restore-triggered.png)
-
-<p class='note'><strong>Note:</strong> Depending on the size of the data, the restore will take some time.</p>
-
-![service-dashboard](images/service-dashboard-final.png)
-
+For a more detailed description see the [a9s Service Dashboard](a9s-service-dashboard.html) documentation.
 
 ## <a id='make-a-service-instance-locally-available'></a> Make a Service Instance Locally Available
 
@@ -408,3 +368,39 @@ vcap@956aaf4e-6da9-4f69-4b1d-8e631a403312:~$
 When the SSH tunnel is open, you can access the instance using the address `localhost:6379`.
 
 <p class='note'><strong>Note:</strong> Be sure to close the session by running <code>exit</code>.</p>
+
+## <a id="service-keys"></a> Service keys
+
+To gain access to the service manually rather than binding apps to it, you can use service keys.
+
+### <a id="create-a-service-key"></a> Creating a Service Key
+
+To create a key to the service instance `redis1` called `mykey`, run the following command:
+
+```bash
+cf create-service-key redis1 mykey
+```
+
+### <a id="listing-service-keys"></a> Listing Service Keys
+
+To list all the keys for the `redis1` service instance, run the following command:
+
+```bash
+cf service-keys redis1
+```
+
+### <a id="accessing-service-keys"></a> Accessing Service Keys
+
+To obtain the key `mykey` from the `redis1` service instance, run the following command:
+
+```bash
+cf service-key redis1 mykey
+```
+
+### <a id="deleting-service-keys"></a> Deleting Service Keys
+
+To delete the key `mykey` from the service instance `redis1`, run the following command:
+
+```bash
+cf delete-service-key redis1 mykey
+```
