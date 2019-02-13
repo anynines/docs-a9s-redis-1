@@ -45,7 +45,7 @@ variable. This variable is a JSON object string.
 ## <a id='best-practices'></a> Best practices
 
 1. Do not rely on order in `VCAP_SERVICES`
-2. Do not rely on service versions 
+2. Do not rely on service versions
 3. Do not hard code service instance names
 
 ## <a id='suggested-practices'></a> Suggested practices
@@ -54,13 +54,13 @@ variable. This variable is a JSON object string.
 
 Specify the service name via an environment viable with your app manifest. This
 is trivial to implement in an app, and follows the [best
-practices](#best-practices) making it easy to rebind an apps without changing
+practices](using-services-in-apps.html#best-practices) making it easy to rebind an apps without changing
 code in your app.
 
 ### Option B
 
 Look for a service instance with a tag, that can be hard coded in an app,
-without compromising the [best practices](#best-practices). This is trivial to
+without compromising the [best practices](using-services-in-apps.html#best-practices). This is trivial to
 implement, but you must clearly document the tag you have hard coded. The
 advantage of this option is not having to update a variable in an app manifest
 when rebinding.
@@ -69,5 +69,5 @@ when rebinding.
 
 Here you can find a [RabbitMQ
 example](https://github.com/anynines/a9s-rabbitmq-app/blob/44b336e8c217e91fe4730b09ad102e97734fa8df/main.go#L90)
-of how to simultaneously implement [suggested practices](#suggested-pracices) A
+of how to simultaneously implement [suggested practices](using-services-in-apps.html#suggested-practices) A
 and B in an app.

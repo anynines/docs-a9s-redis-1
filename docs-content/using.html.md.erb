@@ -14,21 +14,21 @@ To use a9s Redis with an application, create a service instance and bind the ser
 
 After the tile is installed, you can see the `a9s-redis32` and its service plans appear in your CF marketplace. Run `cf marketplace` to see the service listing:
 
-´´´bash
+```bash
 $ cf marketplace
 Getting services from marketplace in org test / space test as admin...
 OK
 service        plans                                                                           description
 a9s-redis32    redis-single-small, redis-single-big, redis-cluster-small, redis-cluster-big    This is the anynines Redis 32 service.
-´´´
+```
 
 ### <a id='create-a-service-instance'></a> Create a Service Instance
 
 To provision a Redis database, run `cf create-service`.
 
-´´´bash
+```bash
 $ cf create-service a9s-redis32 redis-single-small my-redis-service
-´´´
+```
 
 Depending on your infrastructure and service broker utilization, it might take several minutes to create the service instance.
 
@@ -38,9 +38,9 @@ Run `cf services` to view the creation status. This command displays a list of a
 
 After your database is created, run `cf bind-service` to bind the service to your application:
 
-´´´bash
+```bash
 $ cf bind-service a9s-redis-app my-redis-service
-´´´
+```
 
 ### <a id='restage-or-restart-your-application'></a> Restage or Restart Your Application
 
@@ -52,7 +52,7 @@ After a service instance is bound to an application, the credentials of your Red
 
 You can find the credentials in the [VCAP_SERVICES](https://docs.cloudfoundry.org/devguide/deploy-apps/environment-variable.html#VCAP-SERVICES) key.
 
-´´´bash
+```bash
 $ cf env a9s-redis-app
 Getting env variables for app a9s-redis-app in org test / space test as admin...
 OK
@@ -86,11 +86,11 @@ System-Provided:
  }
 }
 ...
-´´´
+```
 
 You can use the host_ip, username, and password values to connect to your database with a Redis client.
 
-a9s Redis for PCF comes with its own Consul cluster to provide hostname resolving. When your DNS is configured to resolve the a9s Redis for PCF service instance domains, you can make use of `host`. For more information, see [Name Resolving With Consul](./installing.html#name-resolving-with-consul).
+a9s Redis for PCF comes with its own Consul cluster to provide hostname resolving. When your DNS is configured to resolve the a9s Redis for PCF service instance domains, you can make use of `host`. For more information, see [Name Resolving With Consul](./name-resolving.html#name-resolving-with-consul).
 
 
 ## <a id='delete-an-a9s-redis-service-instance'></a> Delete an a9s Redis Service Instance
@@ -103,7 +103,7 @@ Before you can delete a service instance, you must unbind it from all apps.
 
 Run `cf services` to list available services.
 
-´´´bash
+```bash
 $ cf services
 
 Getting services in org test / space test as admin...
@@ -111,7 +111,7 @@ OK
 
 name                 service       plan                   bound apps        last operation
 my-redis-service     a9s-redis     redis-single-small     a9s-redis-app     create succeeded
-´´´
+```
 
 This example shows that `my-redis-service` is bound to the `a9s-redis-app` application.
 
@@ -119,17 +119,17 @@ This example shows that `my-redis-service` is bound to the `a9s-redis-app` appli
 
 Run `cf unbind-service` to unbind the service from your app:
 
-´´´bash
+```bash
 $ cf unbind-service a9s-redis-app my-redis-service
-´´´
+```
 
 ### <a id='delete-a-service-instance'></a> Delete a Service Instance
 
 After unbinding the service, it is no longer bound to an app. Run `cf delete-service` to delete the service:
 
-´´´bash
+```bash
 $ cf delete-service my-redis-service
-´´´
+```
 
 It may take several minutes to delete the service. Deleting a service deprovisions the corresponding infrastructure resources.
 Run the `cf services` command to view the deletion status.
@@ -139,9 +139,9 @@ Run the `cf services` command to view the deletion status.
 
 Once created, you can upgrade your service instance to another, larger service plan. A larger service plan provides more CPU, RAM and storage. For more information, see the  [Update a Service Instance](https://docs.cloudfoundry.org/devguide/services/managing-services.html#update_service) of the _Managing Service Instances with the cf CLI_ topic.
 
-´´´bash
+```bash
 $ cf update-service my-redis-service -p a-bigger-plan
-´´´
+```
 
 Here are the plans you can upgrade to, depending on the one you are currently using:
 
@@ -176,9 +176,9 @@ a9s Redis supports RDB persistence with point-in-time snapshots. This setting ca
 ### <a id='configuring-rdb'></a> Configuring RDB
 You can configure RDB according to the needs of your apps by providing customer settings. This setting must follow the original Redis configuration for RDB `-c {"snapshot": "['save 900 1', 'save 300 10']"}`.
 
-´´´bash
+```bash
   $ cf update-service my-redis-service -c {"snapshot": "['save 900 1', 'save 300 10']"}
-´´´
+```
 
 In this example, it is configured to snapshot the Redis database according to the following rules:
 
@@ -190,9 +190,9 @@ In this example, it is configured to snapshot the Redis database according to th
 ### <a id='cache-only'></a> Cache Only
 You can disable snapshots and use Redis as cache only by creating the service with the following customer setting `-c '{"snapshot": "[]"}'`.
 
-´´´bash
+```bash
   $ cf update-service my-redis-service -c {"snapshot": "[]"}
-´´´
+```
 
 For more information, see the snapshot settings in the documentation of [Redis Persistence](https://redis.io/topics/persistence).
 
@@ -212,9 +212,9 @@ With the maxmemory\_policy, you can configure a9s Redis which key to remove when
 
 You can use `-c {"maxmemory_policy": "volatile-ttl"}` to update the maxmemory-policy.
 
-´´´bash
+```bash
   $ cf update-service my-redis-service -c {"maxmemory_policy": "volatile-ttl"}
-´´´
+```
 
 For more information, see the maxmemory-policy settings in the self documented [redis.conf](https://raw.githubusercontent.com/antirez/redis/3.2/redis.conf).
 
@@ -231,18 +231,18 @@ a9s Redis provides two settings to adjust the cluster behaviour, `min_slaves_max
 | min\_slaves\_max\_lag | Time in seconds the master waits before it stops accepting writes when slaves are no more reachable. Default is 10 seconds. min-slaves-to-write is set to 1 and cannot be changed. See [redis.conf](https://raw.githubusercontent.com/antirez/redis/3.2/redis.conf). |
 | down\_after\_milliseconds | Number of milliseconds the master should be unreachable in order to consider it in S_DOWN state. Default is 30000 ms. See [sentinel.conf](http://download.redis.io/redis-stable/sentinel.conf). |
 
-´´´bash
+```bash
   $ cf update-service my-redis-service -c {"min_slaves_max_lag": "10"}
-´´´
+```
 
-´´´bash
+```bash
   $ cf update-service my-redis-service -c {"down_after_milliseconds": "30000"}
-´´´
+```
 
 
 ## <a id='add-a-graphite-endpoint'></a> Add a Graphite Endpoint
 
-If you want to monitor your service with Graphite, you can set an endpoint to where to information will be sent with the `cf update-service` command. This command expects the [-c flag](https://docs.cloudfoundry.org/devguide/services/managing-services.html#arbitrary-params-binding) and a JSON string containing the `graphite` and `metrics_prefix` keys.
+If you want to monitor your service with Graphite, you can set an endpoint to where the information will be sent with the `cf update-service` command. This command expects the [-c flag](https://docs.cloudfoundry.org/devguide/services/managing-services.html#arbitrary-params-binding) and a JSON string containing the `graphite` and `metrics_prefix` keys.
 Depending on your graphite provider, the `metrics_prefix` might require that each metric must start with an API key in their name. You can also change the interval within the data is send to the endpoint. To do this, modify `interval`; the default is 10s.
 
 ```bash
@@ -252,7 +252,7 @@ $ cf update-service my-redis-service -c '{ "graphite": ["yourspace.your-graphite
 
 ## <a id='add-a-syslog-endpoint'></a> Add a Syslog Endpoint
 
-The `cf update-service` command used with the [-c flag](https://docs.cloudfoundry.org/devguide/services/managing-services.html#arbitrary-params-binding) can let you stream your syslog to a third-party service. In this case, the command expects a JSON string containing the `syslog` key. You can also change the interval for the syslog with the same key than for the graphite endpoint `interval`.
+The `cf update-service` command used with the [-c flag](https://docs.cloudfoundry.org/devguide/services/managing-services.html#arbitrary-params-binding) can let you stream your logs to a third-party service. In this case, the command expects a JSON string containing the `syslog` key. You can also change the interval for the syslog with the same key than for the graphite endpoint `interval`.
 
 ```bash
 $ cf update-service my-redis-service -c '{ "syslog": ["logs4.your-syslog-endpoint.com:54321"], "interval": "5" }'
@@ -279,7 +279,7 @@ ca16f111-5073-40b7-973a-156c75dd3028
 
 To see all available security groups, run `cf security-groups`.
 
-```
+```bash
 $cf security-groups
 Getting security groups as demo@anynines.com
 OK

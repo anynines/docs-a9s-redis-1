@@ -18,11 +18,14 @@ To back up, do the following:
 1. On the **Credentials** tab, find the credentials of the service under **Backup Manager Password**.
 
 1. Trigger a backup on all instances by calling the **/backup\_agent/backup\_all** endpoint:
+
 <pre class="terminal">
 $ curl backup:53cr3t&commat;172.28.7.64:3000/backup\_agent/backup\_all -d {}
 </pre>
+
 or on a given instance with its GUID by calling the **/backup\_agent/backup**
 endpoint:
+
 <pre class="terminal">
 $ curl backup:53cr3t&commat;172.28.7.64:3000/backup\_agent/backup -d "instance\_guid=1c16933a-892f-4fe0-b968-ea0bf90246c9"
 </pre>
@@ -30,10 +33,13 @@ $ curl backup:53cr3t&commat;172.28.7.64:3000/backup\_agent/backup -d "instance\_
 To restore, do the following:
 
 1. Find the ID of the Backup and the ID of the instance by listing the instances:
+
 <pre class="terminal">
 $ curl backup:53cr3t&commat;172.28.7.64:3000/instances
 </pre>
+
 This command outputs an array composed of objects like this one:
+
 <pre class="terminal">
 {
   "restores": [],
@@ -54,12 +60,14 @@ This command outputs an array composed of objects like this one:
   "id": 1
 }
 </pre>
+
 In the example above, backups and restores that have been performed for
 the instance with the instance\_id `1c16933a-892f-4fe0-b968-ea0bf90246c9`.
 This ID corresponds to the instance GUID from PCF.
 
 1. Restore the backup by calling the **/backup\_agent/restores**
 endpoint with the backup\_id and instance\_id as data:
+
 <pre class="terminal">
 $ curl backup:53cr3t&commat;172.28.7.64:3000/backup\_agent/restores -d "backup\_id=5" -d "instance\_id=1"
 </pre>
@@ -148,7 +156,8 @@ endpoint before, see [Trigger a backup](backup.html#a9s-pg-backup-trigger-a-back
 ```
 
 Then trigger the restore:
-```
+
+```bash
 $curl backup:53cr3t&commat;172.28.7.64:3000/backup_agent/restores -d "backup_id=148" -d "instance_id=38"
 {"restore_id":5}
 ```
@@ -157,12 +166,13 @@ During the restore of the a9s-pg the a9s Backup Manager is not available and can
 You can watch the backup-agent logs of the a9s-pg master node to see the state.
 On the VM itself you can use the following command:
 
-```
+```bash
 $ tail -f /var/vcap/sys/log/backup-agent/production.log
 ```
 
 **Sample output:**
-```
+
+```bash
 172.28.19.56 - oy6Xh45byt4IMhMmlLSV9s_WCdKx9-gT [20/Nov/2018:12:12:30 +0000] "POST /v1/restore HTTP/1.1" 200 21 0.0023
 172.28.19.51 - oy6Xh45byt4IMhMmlLSV9s_WCdKx9-gT [20/Nov/2018:12:12:31 +0000] "POST /v1/order HTTP/1.1" 200 13 0.7541
 172.28.19.51 - oy6Xh45byt4IMhMmlLSV9s_WCdKx9-gT [20/Nov/2018:12:12:45 +0000] "POST /v1/order HTTP/1.1" 200 19 0.6944

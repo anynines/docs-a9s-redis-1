@@ -8,6 +8,7 @@ This topic describes how to use the a9s Service Dashboard.
 ## <a id='login'></a> Login
 
 1. To get the a9s Service Dashboard URL use the command `cf service SERVICE-NAME`. For example:
+
   ```bash
   $ cf service my-redis
   Showing info of service my-redis in org demo / space demo as admin...
@@ -124,14 +125,14 @@ This means that in order to access this API, we need first to be authenticated a
 
 To correctly authorise the access when accessing using curl, the user must first get the token from Cloud Foundry:
 
-```sh
+```bash
 $ oauth_token=$(cf oauth-token)
 $ bearer_token=$(echo ${oauth_token} | grep bearer)
 ```
 
 Then, get the dashboard url using `cf service`:
 
-```sh
+```bash
 $ cf service <service>
 ```
 
@@ -151,6 +152,7 @@ status:    create succeeded
 ```
 
 In the example above, the url is:
+
 ```bash
 $ url="https://a9s-redis-dashboard.[your-domain.com]/service-instances/db8d8ad3-3d72-4f5a-b84a-47aa9df70a7d"
 ```
@@ -159,7 +161,7 @@ $ url="https://a9s-redis-dashboard.[your-domain.com]/service-instances/db8d8ad3-
 
 The the user must execute the request with the given token:
 
-```sh
+```bash
 $ curl --cookie test.cookie --cookie-jar test.cookie --location --insecure \
   --header "Authorization: ${bearer_token}" "${url}"
 ```
@@ -182,7 +184,8 @@ Lists all available backups as well as the restores that have been applied.
 ##### Request
 
 ###### Route
-```
+
+```bash
 GET /service-instances/db8d8ad3-3d72-4f5a-b84a-47aa9df70a7d/backups
 ```
 
@@ -192,24 +195,28 @@ GET /service-instances/db8d8ad3-3d72-4f5a-b84a-47aa9df70a7d/backups
 | guid | string | The GUID from the service instance. |
 
 ###### Headers
-```
+
+```bash
 Authorization: bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImtleSIsI ... nR5cCI6IkpXVCJ9.eyJqdGkiO ... _YwDVve7co77BoYAvhFrbnVgWMp5A
 
 ```
 
 ##### cURL
-```sh
+
+```bash
 curl --cookie test.cookie --cookie-jar test.cookie --location --insecure --header "Authorization: ${bearer_token}" "${url}/backups"
 ```
 
 ##### Response
 
 ###### Status
-```
+
+```bash
   200 OK
 ```
 
 ###### Body
+
 ```json
 {
   "id": 85,
@@ -252,7 +259,8 @@ Start a backup process on a given service instance.
 ##### Request
 
 ###### Route
-```
+
+```bash
 POST /service-instances/db8d8ad3-3d72-4f5a-b84a-47aa9df70a7d/backups
 ```
 
@@ -262,20 +270,23 @@ POST /service-instances/db8d8ad3-3d72-4f5a-b84a-47aa9df70a7d/backups
 | guid | string | The GUID from the service instance. |
 
 ###### Headers
-```
+
+```bash
 Authorization: bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImtleSIsI ... nR5cCI6IkpXVCJ9.eyJqdGkiO ... _YwDVve7co77BoYAvhFrbnVgWMp5A
 
 ```
 
 ##### cURL
-```sh
+
+```bash
 curl --cookie test.cookie --cookie-jar test.cookie --location --insecure --header "Authorization: ${bearer_token}" -X POST "${url}/backups"
 ```
 
 ##### Response
 
 ###### Status
-```
+
+```bash
   201 Created
 ```
 
@@ -286,7 +297,8 @@ Restores a backup to a given service instance.
 ##### Request
 
 ###### Route
-```
+
+```bash
 POST /service-instances/db8d8ad3-3d72-4f5a-b84a-47aa9df70a7d/backups/restore
 ```
 
@@ -308,13 +320,15 @@ Authorization: bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImtleSIsI ... nR5cCI6IkpXVCJ9.
 ```
 
 ##### cURL
-```sh
+
+```bash
 curl --cookie test.cookie --cookie-jar test.cookie --location --insecure --header "Authorization: ${bearer_token}" -X POST "${url}/backups/restore" --data "instance_id=db8d8ad3-3d72-4f5a-b84a-47aa9df70a7d" --data "backup_id=1"
 ```
 
 ##### Response
 
 ###### Status
-```
+
+```bash
   200 OK
 ```

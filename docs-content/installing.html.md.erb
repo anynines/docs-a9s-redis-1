@@ -56,7 +56,7 @@ VM and persistent disk types will be used in the service instance deployments. D
 | VM medium | 2 CPU, 4&nbsp;GB RAM, 8&nbsp;GB Disk |
 | VM large | 4 CPU, 8&nbsp;GB RAM, 30&nbsp;GB Disk |
 
-<%= image_tag("plan-configuration.png") %>
+<%= image_tag("plan_configuration.png") %>
 
 ### <a id="backup_configuration"></a> Backup Configuration
 
@@ -203,6 +203,8 @@ For example, you might use `logs.papertrail.com:44456` for the syslog endpoint.
 
 All settings on this page are related to the components of the service offering itself not to the service instances.
 
+<%= image_tag("management_cluster.png") %>
+
 #### <a id='dns-domain'></a> DNS Domain
 <table class="nice">
   <th>Field</th>
@@ -210,7 +212,7 @@ All settings on this page are related to the components of the service offering 
   </tr>
   <tr>
     <td>Configure DNS Domain</td>
-    <td>The DNS domain for this instalation. All instances will be created under this name. See <a href="#name-resolving-with-consul">Name resolving with consul</a> for mor information.</td>
+    <td>The DNS domain for this instalation. All instances will be created under this name. See <a href="name-resolving.html">Name resolving with consul</a> for mor information.</td>
   <tr>
 </table>
 
